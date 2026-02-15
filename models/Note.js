@@ -1,28 +1,19 @@
 import mongoose from "mongoose";
 
-const noteSchema = new mongoose.Schema({
+const noteSchema = new mongoose.Schema(
+  {
     title: {
-        type: String,
-        required: true,
-        maxLength: 100
+      type: String,
+      required: true,
+      maxLength: 100,
     },
     content: {
-        type: String,
-        required: true,
-        maxLength: 1000
+      type: String,
+      required: true,
+      maxLength: 1000,
     },
-    createdAt: {
-        type: Date,
-        default: Date.now
-    },
-    updatedAt: {
-        type: Date,
-        default: Date.now
-    }
-});
-noteSchema.pre("save", function(next){
-    this.updatedAt = Date.now();
-    next();
-})
+  },
+  { timestamps: true },
+);
 
 export default mongoose.models.Note || mongoose.model("Note", noteSchema);
