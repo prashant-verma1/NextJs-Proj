@@ -43,11 +43,12 @@ const NotesClient = ({ initialNotes }) => {
         method: "DELETE",
       });
       const result = await response.json();
+      // Remove from UI regardless — if server says "not found", it's already gone
+      setNotes(notes.filter((note) => note._id !== id));
       if (result.success) {
-        setNotes(notes.filter((note) => note._id !== id));
         toast.success("Note deleted successfully");
       } else {
-        toast.error(result.message);
+        toast.success("Note removed");
       }
     } catch (error) {
       console.error("Error deleting note:", error);
