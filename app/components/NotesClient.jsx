@@ -1,8 +1,10 @@
 "use client";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 
 const NotesClient = ({ initialNotes }) => {
+  const router = useRouter();
   const [notes, setNotes] = useState(initialNotes);
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
@@ -31,6 +33,7 @@ const NotesClient = ({ initialNotes }) => {
       setTitle("");
       setContent("");
       setLoading(false);
+      router.refresh();
     } catch (error) {
       console.error("Error creating note:", error);
       toast.error("Failed to create note");
@@ -45,6 +48,7 @@ const NotesClient = ({ initialNotes }) => {
       const result = await response.json();
       // Remove from UI regardless — if server says "not found", it's already gone
       setNotes(notes.filter((note) => note._id !== id));
+      router.refresh();
       if (result.success) {
         toast.success("Note deleted successfully");
       } else {
@@ -82,6 +86,7 @@ const NotesClient = ({ initialNotes }) => {
         setNotes(notes.map((note) => (note._id === id ? result.data : note)));
         toast.success("Note updated successfully");
         cancelEdit();
+        router.refresh();
         setLoading(false);
         setTitle("");
         setContent("");
